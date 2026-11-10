@@ -1,0 +1,2330 @@
+{
+  "version": 1,
+  "collections": {
+    "admins": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "name": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "email": {
+              "bsonType": "string",
+              "maxLength": 254
+            },
+            "passwordHash": {
+              "bsonType": "string",
+              "maxLength": 255,
+              "minLength": 30
+            },
+            "active": {
+              "bsonType": "bool"
+            },
+            "passwordChangedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "name",
+            "email",
+            "passwordHash",
+            "active"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "email": 1
+          },
+          "name": "email_unique",
+          "unique": true
+        }
+      ]
+    },
+    "admin_sessions": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "adminId": {
+              "bsonType": "objectId"
+            },
+            "tokenHash": {
+              "bsonType": "string",
+              "maxLength": 128
+            },
+            "expiresAt": {
+              "bsonType": "date"
+            },
+            "revokedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "adminId",
+            "tokenHash",
+            "expiresAt"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "tokenHash": 1
+          },
+          "name": "tokenHash_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "expiresAt": 1
+          },
+          "name": "session_expiry",
+          "expireAfterSeconds": 0
+        },
+        {
+          "key": {
+            "adminId": 1
+          },
+          "name": "admin_sessions"
+        }
+      ]
+    },
+    "media": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "kind": {
+              "bsonType": "string",
+              "enum": [
+                "image",
+                "video",
+                "document"
+              ]
+            },
+            "storageProvider": {
+              "bsonType": "string",
+              "maxLength": 60
+            },
+            "storageKey": {
+              "bsonType": "string",
+              "maxLength": 1024
+            },
+            "originalName": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "mimeType": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "sizeBytes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "width": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "height": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "durationSeconds": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "alt": {
+              "bsonType": "string",
+              "maxLength": 1000
+            },
+            "caption": {
+              "bsonType": "string",
+              "maxLength": 2000
+            },
+            "uploadedBy": {
+              "bsonType": "objectId"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "kind",
+            "storageProvider",
+            "storageKey",
+            "originalName",
+            "mimeType",
+            "sizeBytes"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "storageProvider": 1,
+            "storageKey": 1
+          },
+          "name": "storage_key_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "kind": 1,
+            "createdAt": -1
+          },
+          "name": "media_browser"
+        }
+      ]
+    },
+    "portfolio_settings": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "key": {
+              "bsonType": "string",
+              "enum": [
+                "main"
+              ]
+            },
+            "name": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "roles": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "maxLength": 120
+              }
+            },
+            "heroDescription": {
+              "bsonType": "string",
+              "maxLength": 4000
+            },
+            "aboutDescription": {
+              "bsonType": "string",
+              "maxLength": 20000
+            },
+            "profileImageId": {
+              "bsonType": "objectId"
+            },
+            "resumeId": {
+              "bsonType": "objectId"
+            },
+            "heroMediaType": {
+              "bsonType": "string",
+              "enum": [
+                "photo",
+                "video"
+              ]
+            },
+            "heroVideoId": {
+              "bsonType": "objectId"
+            },
+            "email": {
+              "bsonType": "string",
+              "maxLength": 254
+            },
+            "phone": {
+              "bsonType": "string",
+              "maxLength": 80
+            },
+            "location": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "availability": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "currentRole": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "stats": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "label": {
+                    "bsonType": "string",
+                    "maxLength": 120
+                  },
+                  "value": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "visible": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "socialLinks": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "platform": {
+                    "bsonType": "string",
+                    "enum": [
+                      "whatsapp",
+                      "instagram",
+                      "linkedin",
+                      "facebook",
+                      "github"
+                    ]
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "visible": {
+                    "bsonType": "bool"
+                  },
+                  "displayOrder": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double",
+                      "decimal"
+                    ],
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "platform",
+                  "url"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "defaultSeo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            },
+            "navigation": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "label": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "href": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "displayOrder": {
+                    "bsonType": [
+                      "int",
+                      "long",
+                      "double",
+                      "decimal"
+                    ],
+                    "minimum": 0
+                  },
+                  "visible": {
+                    "bsonType": "bool"
+                  },
+                  "parentKey": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "key": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "key",
+                  "label",
+                  "href"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "mobileNavigation": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "label": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "visible": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "label",
+                  "url"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "footerText": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "floatingControls": {
+              "bsonType": "object",
+              "properties": {
+                "enabled": {
+                  "bsonType": "bool"
+                },
+                "platforms": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "enum": [
+                      "whatsapp",
+                      "instagram",
+                      "linkedin",
+                      "facebook"
+                    ]
+                  }
+                },
+                "comingSoonEnabled": {
+                  "bsonType": "bool"
+                },
+                "comingSoonLabel": {
+                  "bsonType": "string",
+                  "maxLength": 120
+                },
+                "animationEnabled": {
+                  "bsonType": "bool"
+                },
+                "displayOrder": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  }
+                },
+                "featuredTeaserIds": {
+                  "bsonType": "array",
+                  "items": {
+                    "bsonType": "objectId"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "splash": {
+              "bsonType": "object",
+              "properties": {
+                "enabled": {
+                  "bsonType": "bool"
+                },
+                "wordmark": {
+                  "bsonType": "string",
+                  "maxLength": 120
+                },
+                "subtitle": {
+                  "bsonType": "string",
+                  "maxLength": 255
+                },
+                "durationMs": {
+                  "bsonType": "int",
+                  "minimum": 0,
+                  "maximum": 3000
+                },
+                "oncePerSession": {
+                  "bsonType": "bool"
+                },
+                "animationEnabled": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            },
+            "heroPortraitPosition": {
+              "bsonType": "string",
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "key",
+            "name"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "key": 1
+          },
+          "name": "key_unique",
+          "unique": true
+        }
+      ]
+    },
+    "pages": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "key": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "portraitId": {
+              "bsonType": "objectId"
+            },
+            "timeline": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "title": {
+                    "bsonType": "string",
+                    "maxLength": 255
+                  },
+                  "organization": {
+                    "bsonType": "string",
+                    "maxLength": 255
+                  },
+                  "startLabel": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "endLabel": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "description": {
+                    "bsonType": "string",
+                    "maxLength": 10000
+                  },
+                  "kind": {
+                    "bsonType": "string",
+                    "enum": [
+                      "education",
+                      "experience",
+                      "milestone"
+                    ]
+                  }
+                },
+                "required": [
+                  "title",
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "lastReviewedAt": {
+              "bsonType": "date"
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "key",
+            "slug",
+            "title",
+            "publicationStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "key": 1
+          },
+          "name": "key_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        }
+      ]
+    },
+    "home_sections": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "key": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "heading": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 10000
+            },
+            "visible": {
+              "bsonType": "bool"
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "featuredProjectIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "featuredVentureIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "featuredPostIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "featuredServiceIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "key",
+            "visible",
+            "displayOrder"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "key": 1
+          },
+          "name": "key_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "displayOrder": 1
+          },
+          "name": "section_order"
+        }
+      ]
+    },
+    "services": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "summary": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "coverId": {
+              "bsonType": "objectId"
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "capabilities": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "maxLength": 2000
+              }
+            },
+            "deliverables": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "maxLength": 2000
+              }
+            },
+            "faqs": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "question": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "answer": {
+                    "bsonType": "string",
+                    "maxLength": 10000
+                  }
+                },
+                "required": [
+                  "question",
+                  "answer"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "relatedProjectIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "visible": {
+              "bsonType": "bool"
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            },
+            "process": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "title": {
+                    "bsonType": "string",
+                    "maxLength": 255
+                  },
+                  "description": {
+                    "bsonType": "string",
+                    "maxLength": 4000
+                  }
+                },
+                "required": [
+                  "title"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "title",
+            "slug",
+            "publicationStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "publicationStatus": 1,
+            "displayOrder": 1
+          },
+          "name": "publication_order"
+        }
+      ]
+    },
+    "skill_items": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "group": {
+              "bsonType": "string",
+              "enum": [
+                "skills",
+                "process",
+                "beyond_code"
+              ]
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 10000
+            },
+            "iconKey": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "iconMediaId": {
+              "bsonType": "objectId"
+            },
+            "category": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "visible": {
+              "bsonType": "bool"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "group",
+            "title",
+            "displayOrder",
+            "visible"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "group": 1,
+            "displayOrder": 1
+          },
+          "name": "group_order"
+        }
+      ]
+    },
+    "projects": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "summary": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "coverId": {
+              "bsonType": "objectId"
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "gallery": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "required": [
+                  "mediaId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "role": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "technologies": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "string",
+                "maxLength": 100
+              }
+            },
+            "category": {
+              "bsonType": "string",
+              "enum": [
+                "wordpress",
+                "mern",
+                "web_design",
+                "other"
+              ]
+            },
+            "progressStatus": {
+              "bsonType": "string",
+              "enum": [
+                "coming_soon",
+                "in_development",
+                "live"
+              ]
+            },
+            "websiteUrl": {
+              "bsonType": "string",
+              "maxLength": 2048
+            },
+            "repositoryUrl": {
+              "bsonType": "string",
+              "maxLength": 2048
+            },
+            "relatedProjectIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "relatedServiceIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "featured": {
+              "bsonType": "bool"
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            },
+            "videoId": {
+              "bsonType": "objectId"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "title",
+            "slug",
+            "publicationStatus",
+            "progressStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "publicationStatus": 1,
+            "displayOrder": 1
+          },
+          "name": "publication_order"
+        },
+        {
+          "key": {
+            "category": 1,
+            "publicationStatus": 1
+          },
+          "name": "project_category"
+        }
+      ]
+    },
+    "ventures": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "name": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "role": {
+              "bsonType": "string",
+              "enum": [
+                "Founder",
+                "Co-founder"
+              ]
+            },
+            "summary": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "logoId": {
+              "bsonType": "objectId"
+            },
+            "coverId": {
+              "bsonType": "objectId"
+            },
+            "gallery": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  }
+                },
+                "required": [
+                  "mediaId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "progressStatus": {
+              "bsonType": "string",
+              "enum": [
+                "coming_soon",
+                "in_development",
+                "live"
+              ]
+            },
+            "websiteUrl": {
+              "bsonType": "string",
+              "maxLength": 2048
+            },
+            "socialLinks": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "label": {
+                    "bsonType": "string",
+                    "maxLength": 100
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "visible": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "label",
+                  "url"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "relatedProjectIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "featured": {
+              "bsonType": "bool"
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "name",
+            "slug",
+            "role",
+            "publicationStatus",
+            "progressStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "publicationStatus": 1,
+            "displayOrder": 1
+          },
+          "name": "publication_order"
+        }
+      ]
+    },
+    "private_notes": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "targetType": {
+              "bsonType": "string",
+              "enum": [
+                "project",
+                "venture",
+                "inquiry"
+              ]
+            },
+            "targetId": {
+              "bsonType": "objectId"
+            },
+            "body": {
+              "bsonType": "string",
+              "maxLength": 100000
+            },
+            "authorId": {
+              "bsonType": "objectId"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "targetType",
+            "targetId",
+            "body",
+            "authorId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "targetType": 1,
+            "targetId": 1
+          },
+          "name": "private_target"
+        }
+      ]
+    },
+    "teasers": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "targetType": {
+              "bsonType": "string",
+              "enum": [
+                "project",
+                "venture"
+              ]
+            },
+            "targetId": {
+              "bsonType": "objectId"
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "summary": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "coverId": {
+              "bsonType": "objectId"
+            },
+            "videoId": {
+              "bsonType": "objectId"
+            },
+            "launchAt": {
+              "bsonType": "date"
+            },
+            "displayOrder": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "featured": {
+              "bsonType": "bool"
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "targetType",
+            "targetId",
+            "slug",
+            "title",
+            "publicationStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "targetType": 1,
+            "targetId": 1
+          },
+          "name": "teaser_target_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "publicationStatus": 1,
+            "displayOrder": 1
+          },
+          "name": "publication_order"
+        }
+      ]
+    },
+    "blog_categories": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "name": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "description": {
+              "bsonType": "string",
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "name",
+            "slug"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        }
+      ]
+    },
+    "blog_posts": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "title": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "slug": {
+              "bsonType": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "excerpt": {
+              "bsonType": "string",
+              "maxLength": 5000
+            },
+            "authorId": {
+              "bsonType": "objectId"
+            },
+            "coverId": {
+              "bsonType": "objectId"
+            },
+            "categoryIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "content": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "object",
+                "properties": {
+                  "type": {
+                    "bsonType": "string",
+                    "enum": [
+                      "paragraph",
+                      "heading",
+                      "image",
+                      "video",
+                      "youtube",
+                      "quote",
+                      "code",
+                      "list",
+                      "link"
+                    ]
+                  },
+                  "text": {
+                    "bsonType": "string",
+                    "maxLength": 100000
+                  },
+                  "level": {
+                    "bsonType": "int",
+                    "minimum": 1,
+                    "maximum": 6
+                  },
+                  "mediaId": {
+                    "bsonType": "objectId"
+                  },
+                  "alt": {
+                    "bsonType": "string",
+                    "maxLength": 1000
+                  },
+                  "caption": {
+                    "bsonType": "string",
+                    "maxLength": 2000
+                  },
+                  "url": {
+                    "bsonType": "string",
+                    "maxLength": 2048
+                  },
+                  "language": {
+                    "bsonType": "string",
+                    "maxLength": 50
+                  },
+                  "items": {
+                    "bsonType": "array",
+                    "items": {
+                      "bsonType": "string",
+                      "maxLength": 10000
+                    }
+                  },
+                  "ordered": {
+                    "bsonType": "bool"
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "readingTimeMinutes": {
+              "bsonType": [
+                "int",
+                "long",
+                "double",
+                "decimal"
+              ],
+              "minimum": 0
+            },
+            "featured": {
+              "bsonType": "bool"
+            },
+            "relatedPostIds": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "objectId"
+              }
+            },
+            "publicationStatus": {
+              "bsonType": "string",
+              "enum": [
+                "draft",
+                "published"
+              ]
+            },
+            "publishedAt": {
+              "bsonType": "date"
+            },
+            "seo": {
+              "bsonType": "object",
+              "properties": {
+                "title": {
+                  "bsonType": "string",
+                  "maxLength": 200
+                },
+                "description": {
+                  "bsonType": "string",
+                  "maxLength": 500
+                },
+                "shareImageId": {
+                  "bsonType": "objectId"
+                },
+                "canonicalUrl": {
+                  "bsonType": "string",
+                  "maxLength": 2048
+                },
+                "noIndex": {
+                  "bsonType": "bool"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "title",
+            "slug",
+            "authorId",
+            "publicationStatus"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "slug": 1
+          },
+          "name": "slug_unique",
+          "unique": true
+        },
+        {
+          "key": {
+            "publicationStatus": 1,
+            "publishedAt": -1
+          },
+          "name": "published_posts"
+        },
+        {
+          "key": {
+            "categoryIds": 1,
+            "publicationStatus": 1
+          },
+          "name": "post_categories"
+        }
+      ]
+    },
+    "inquiries": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "name": {
+              "bsonType": "string",
+              "maxLength": 120
+            },
+            "email": {
+              "bsonType": "string",
+              "maxLength": 254
+            },
+            "serviceId": {
+              "bsonType": "objectId"
+            },
+            "serviceInterest": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "budget": {
+              "bsonType": "string",
+              "maxLength": 255
+            },
+            "message": {
+              "bsonType": "string",
+              "maxLength": 20000
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": [
+                "unread",
+                "read",
+                "archived"
+              ]
+            },
+            "readAt": {
+              "bsonType": "date"
+            },
+            "archivedAt": {
+              "bsonType": "date"
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "name",
+            "email",
+            "message",
+            "status"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "status": 1,
+            "createdAt": -1
+          },
+          "name": "inquiry_inbox"
+        }
+      ]
+    },
+    "audit_logs": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "properties": {
+            "_id": {
+              "bsonType": "objectId"
+            },
+            "createdAt": {
+              "bsonType": "date"
+            },
+            "updatedAt": {
+              "bsonType": "date"
+            },
+            "actorId": {
+              "bsonType": "objectId"
+            },
+            "action": {
+              "bsonType": "string",
+              "maxLength": 100
+            },
+            "targetId": {
+              "bsonType": "objectId"
+            },
+            "summary": {
+              "bsonType": "string",
+              "maxLength": 2000
+            },
+            "targetCollection": {
+              "bsonType": "string",
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "createdAt",
+            "updatedAt",
+            "actorId",
+            "action",
+            "targetCollection"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "indexes": [
+        {
+          "key": {
+            "createdAt": -1
+          },
+          "name": "audit_date"
+        }
+      ]
+    }
+  }
+}

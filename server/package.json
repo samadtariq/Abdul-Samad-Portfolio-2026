@@ -1,0 +1,34 @@
+{
+  "name": "abdul-samad-portfolio-server",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.9.0"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js",
+    "db:migrate": "node --env-file-if-exists=.env seed/migrate.js",
+    "db:admin": "node --env-file-if-exists=.env seed/createAdmin.js",
+    "pretest": "npm --prefix ../client run build",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "test:integration": "npm test"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.0",
+    "file-type": "^21.0.0",
+    "helmet": "^8.0.0",
+    "mongodb": "^6.0.0",
+    "mongoose": "^8.0.0",
+    "multer": "^2.0.0",
+    "nodemailer": "^10.3.1"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.0.0",
+    "supertest": "^7.0.0"
+  }
+}

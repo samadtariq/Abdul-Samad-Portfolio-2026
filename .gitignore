@@ -1,0 +1,10 @@
+**/node_modules/
+**/.env
+**/.env.*
+!**/.env.example
+client/dist/
+client/dist-ssr/
+server/uploads/*
+!server/uploads/.gitkeep
+**/.cache/
+**/test-results/

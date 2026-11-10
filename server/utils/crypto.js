@@ -1,0 +1,2 @@
+import { createHash } from "node:crypto";
+export const hash = (x) => createHash("sha256").update(x).digest("hex");
