@@ -6,6 +6,7 @@ import { clientDist, uploadDirectory } from "./config/paths.js";
 import { createStorage } from "./services/storageService.js";
 import { session, requireAuth } from "./middleware/authMiddleware.js";
 import { createCsrfMiddleware } from "./middleware/csrfMiddleware.js";
+import { connectDatabase } from "./config/database.js";
 import {
   securityHeaders,
   privatePageHeaders,
@@ -66,3 +67,8 @@ export function createApp({
   app.use(errorHandler);
   return app;
 }
+if (process.env.VERCEL === "1") {
+  await connectDatabase();
+}
+
+export default createApp();
