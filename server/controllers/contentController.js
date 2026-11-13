@@ -153,7 +153,7 @@ export function createContentController({ storage }) {
       );
     const doc = await models[n].findById(id);
     if (!doc) throw error("Not found", 404);
-    if (n === "media") await storage.remove(doc.storageKey);
+    if (n === "media") await storage.remove(doc.storageKey, doc.storageProvider);
     await doc.deleteOne();
     await audit(req, n, doc._id, "delete");
     res.json({ ok: true });

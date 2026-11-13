@@ -25,7 +25,9 @@ export function createApp({
   const app = express(),
     origin = new URL(siteUrl).origin,
     production = process.env.NODE_ENV === "production",
-    storage = createStorage(uploadDir);
+    storage = createStorage(uploadDir, {
+      useCloudinary: process.env.VERCEL === "1",
+    });
   if (process.env.TRUST_PROXY === "1") app.set("trust proxy", 1);
   app.disable("x-powered-by");
   app.use(

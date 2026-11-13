@@ -1,17 +1,16 @@
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import path from "node:path";
-// Local development/persistent-volume adapter. Add another adapter here before
-// changing media.storageProvider; unsupported providers are never silently used.
-export function createStorage(directory) {
+import { createCloudinaryStorage } from "./cloudinaryStorage.js";
+
+export function createStorage(directory, { useCloudinary = false } = {}) {
   const root = path.resolve(directory);
   const filePath = (key) => {
     if (!/^[a-f0-9]{40}\.[a-z0-9]+$/.test(key))
       throw new Error("Invalid storage key");
     return path.join(root, key);
   };
-  return {
-    filePath,
+  const local = {
     async put(buffer, extension) {
       if (!/^[a-z0-9]+$/.test(extension))
         throw new Error("Invalid file extension");
@@ -25,5 +24,21 @@ export function createStorage(directory) {
         if (e.code !== "ENOENT") throw e;
       });
     },
+  };
+  const cloudinary = createCloudinaryStorage();
+  return {
+    provider: useCloudinary ? "cloudinary" : "local",
+    filePath,
+    async put(buffer, extension, mimeType, kind) {
+      return useCloudinary
+        ? cloudinary.put(buffer, extension, mimeType, kind)
+        : local.put(buffer, extension);
+    },
+    async remove(key, provider = "local") {
+      if (provider === "local") return local.remove(key);
+      if (provider === "cloudinary") return cloudinary.remove(key);
+      throw new Error("Unsupported storage provider");
+    },
+    fetch: cloudinary.fetch,
   };
 }
