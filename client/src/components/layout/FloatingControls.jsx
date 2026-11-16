@@ -67,7 +67,9 @@ export function Floating({ data }) {
     );
   return (
     <>
-      <div className="floating">
+      <div
+        className={f.animationEnabled ? "floating floating-motion" : "floating"}
+      >
         {controls.map((x) => (
           <React.Fragment key={x.key}>{x.node}</React.Fragment>
         ))}

@@ -188,11 +188,23 @@ export function Home({ data }) {
                   <div
                     className={
                       "grid " +
-                      (group === "skills" ? "skills-grid" : "process-grid")
+                      {
+                        skills: "skills-grid",
+                        process: "process-grid",
+                        beyond_code: "beyond-code-stack",
+                      }[group]
                     }
                   >
                     {list.map((v, i) => (
-                      <div className="card compact" key={v._id}>
+                      <div
+                        className="card compact"
+                        key={v._id}
+                        style={
+                          group === "beyond_code"
+                            ? { "--stack-index": i }
+                            : undefined
+                        }
+                      >
                         <span className="eyebrow orange">
                           {v.iconKey || String(i + 1).padStart(2, "0")}
                         </span>
@@ -261,7 +273,8 @@ export function Home({ data }) {
           <section
             key={section.key}
             className={
-              "section " + (section.key === "hero" ? "hero-section" : "")
+              "section home-motion-section " +
+              (section.key === "hero" ? "hero-section" : "")
             }
             id={section.key}
           >
