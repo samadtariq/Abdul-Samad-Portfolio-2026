@@ -91,6 +91,18 @@ export function createPublicController({ origin }) {
       configuredCanonical && /^https?:\/\//.test(configuredCanonical)
         ? configuredCanonical
         : origin + req.path;
+        if (
+  (page.status || 200) === 200 &&
+  !data.preview &&
+  !req.admin &&
+  !req.get("authorization") &&
+  !req.originalUrl.includes("?")
+) {
+  res.set(
+    "Vercel-CDN-Cache-Control",
+    "s-maxage=60, stale-while-revalidate=300",
+  );
+}
     res
       .status(page.status || 200)
       .set("Cache-Control", data.preview ? "no-store" : "no-cache")
