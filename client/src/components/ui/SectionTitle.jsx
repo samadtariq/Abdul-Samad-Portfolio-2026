@@ -9,7 +9,7 @@ export function SectionTitle({ label, title, action }) {
       </div>
       {action && (
         <a className="text-link" href={action[1]}>
-          {action[0]} ↗
+          {action[0]} <span className="link-arrow" aria-hidden="true">↗</span>
         </a>
       )}
     </div>

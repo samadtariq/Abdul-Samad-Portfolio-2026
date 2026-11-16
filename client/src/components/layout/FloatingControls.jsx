@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { selectFeatured } from "../../utils/featured.js";
+import { SocialIcon } from "../ui/SocialIcon.jsx";
 import { Modal } from "../ui/Modal.jsx";
 import { CardGrid } from "../content/CardGrid.jsx";
 
@@ -16,12 +17,6 @@ export function Floating({ data }) {
     0,
     4,
   );
-  const icons = {
-    whatsapp: "WA",
-    instagram: "IG",
-    linkedin: "in",
-    facebook: "f",
-  };
   let controls = [
     ...(f.enabled
       ? socials.map((v) => ({
@@ -35,7 +30,7 @@ export function Floating({ data }) {
               aria-label={v.platform}
               title={v.platform}
             >
-              {icons[v.platform]}
+              <SocialIcon platform={v.platform} />
             </a>
           ),
         }))

@@ -5,13 +5,14 @@ import { Badge } from "../ui/Badge.jsx";
 export function CardGrid({
   items,
   collection,
+  numbered = false,
   empty = "New work is taking shape. Check back soon.",
 }) {
   const prefix =
     { blog_posts: "blog", teasers: "coming-soon" }[collection] || collection;
   return items.length ? (
     <div className="grid cards">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <a
           className="card item-card"
           href={`/${prefix}/${item.slug}`}
@@ -45,6 +46,11 @@ export function CardGrid({
               </span>
             </div>
           )}
+          {numbered && (
+            <span className="project-index" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+          )}
           <div className="card-body">
             <div className="meta">
               {item.progressStatus && <Badge>{item.progressStatus}</Badge>}
@@ -68,7 +74,7 @@ export function CardGrid({
                 : collection === "ventures"
                   ? "Explore venture"
                   : "View details"}{" "}
-              ↗
+              <span className="link-arrow" aria-hidden="true">↗</span>
             </span>
           </div>
         </a>

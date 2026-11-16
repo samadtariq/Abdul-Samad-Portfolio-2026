@@ -59,8 +59,8 @@ export function Header({ settings, path }) {
             );
           })}
         </nav>
-        <a className="button small" href="/contact">
-          Let’s Talk <span className="dot" />
+        <a className="button small header-cta" href="/contact">
+          Let’s Talk <Icon />
         </a>
       </header>
       <nav className="bottom-nav" aria-label="Mobile navigation">

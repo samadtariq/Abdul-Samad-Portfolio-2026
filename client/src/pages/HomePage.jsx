@@ -1,6 +1,7 @@
 import React from "react";
 import { Blocks } from "../components/content/ContentBlocks.jsx";
 import { Role } from "../components/home/RotatingRole.jsx";
+import { SocialIcon } from "../components/ui/SocialIcon.jsx";
 import { Icon } from "../components/ui/Icon.jsx";
 import { mediaUrl } from "../utils/media.js";
 import { Monitor } from "../components/home/HeroMonitor.jsx";
@@ -27,7 +28,7 @@ export function Home({ data }) {
           case "hero":
             view = (
               <div className="hero">
-                <div>
+                <div className="hero-copy">
                   <p className="eyebrow availability">
                     <span className="dot" />
                     {s.availability ||
@@ -49,7 +50,7 @@ export function Home({ data }) {
                       Contact Me
                     </a>
                     {s.resumeId && (
-                      <a className="text-link" href={mediaUrl(s.resumeId)}>
+                      <a className="button outline tertiary" href={mediaUrl(s.resumeId)}>
                         ↓ View Resume
                       </a>
                     )}
@@ -63,8 +64,11 @@ export function Home({ data }) {
                           href={l.url}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="social-button"
+                          aria-label={l.platform}
+                          title={l.platform}
                         >
-                          {l.platform} ↗
+                          <SocialIcon platform={l.platform} />
                         </a>
                       ))}
                   </div>
@@ -155,7 +159,9 @@ export function Home({ data }) {
                       </span>
                       <h3>{v.title}</h3>
                       <p>{v.summary}</p>
-                      <span className="text-link">Explore service ↗</span>
+                      <span className="text-link">
+                        Explore service <span className="link-arrow" aria-hidden="true">↗</span>
+                      </span>
                     </a>
                   ))}
                 </div>
@@ -189,20 +195,24 @@ export function Home({ data }) {
                     className={
                       "grid " +
                       {
-                        skills: "skills-grid",
+                        skills: "skills-grid skill-stack",
                         process: "process-grid",
                         beyond_code: "beyond-code-stack",
                       }[group]
                     }
                   >
+                    {group === "skills" && list.length > 1 && (
+                      <span className="skill-counter" aria-hidden="true">
+                        <span data-skill-current>01</span> / {String(list.length).padStart(2, "0")}
+                      </span>
+                    )}
                     {list.map((v, i) => (
                       <div
                         className="card compact"
                         key={v._id}
+                        data-step-number={group === "process" ? String(i + 1).padStart(2, "0") : undefined}
                         style={
-                          group === "beyond_code"
-                            ? { "--stack-index": i }
-                            : undefined
+                          group !== "process" ? { "--stack-index": i } : undefined
                         }
                       >
                         <span className="eyebrow orange">
@@ -232,6 +242,7 @@ export function Home({ data }) {
                 />
                 <CardGrid
                   collection="projects"
+                  numbered
                   items={selectFeatured(
                     data.items.projects,
                     section.featuredProjectIds,

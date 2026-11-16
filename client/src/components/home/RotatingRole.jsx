@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 export function Role({ roles }) {
   const firstRole = roles[0] || "Web Developer";
   const [text, setText] = useState(firstRole);
+  const [version, setVersion] = useState(0);
 
   useEffect(() => {
     setText(firstRole);
@@ -15,6 +16,7 @@ export function Role({ roles }) {
     function start() {
       clearTimeout(timer);
       setText(firstRole);
+      setVersion(0);
       if (preference.matches) return;
 
       let roleIndex = 0;
@@ -23,6 +25,7 @@ export function Role({ roles }) {
 
       function tick() {
         const word = letters[roleIndex];
+        if (length === 0 && !deleting) setVersion((previous) => previous + 1);
         length += deleting ? -1 : 1;
         setText(word.slice(0, length).join(""));
 
@@ -58,7 +61,8 @@ export function Role({ roles }) {
       ))}
       <span className="role-accessible">{firstRole}</span>
       <span className="role-typed" aria-hidden="true">
-        {text}<span className="cursor" />
+        <span key={version} className={version ? "role-word role-word-enter" : "role-word"}>{text}</span>
+        <span className="cursor" />
       </span>
     </span>
   );

@@ -89,22 +89,6 @@
   }
 }
 
-@keyframes home-photo-swing {
-  from {
-    opacity: 0.45;
-    translate: 0 -22px;
-    rotate: -6deg;
-  }
-}
-
-@keyframes home-timeline-draw {
-  from { scale: 0 1; }
-}
-
-@keyframes home-timeline-draw-vertical {
-  from { scale: 1 0; }
-}
-
 @keyframes home-splash-exit {
   0%, 77% { opacity: 1; }
   100% { opacity: 0; }
@@ -162,59 +146,8 @@
     animation: home-monitor-enter 820ms 70ms cubic-bezier(.22, 1, .36, 1) both;
   }
 
-  .floating-motion .social-float {
-    transition: translate 220ms ease, box-shadow 220ms ease;
-  }
-
-  .floating-motion .social-float:is(:hover, :focus-visible) {
-    translate: 0 -4px;
-    box-shadow: 0 6px 18px #17191628;
-  }
-
   .floating-motion .bounce {
     animation: home-teaser-pulse 7s ease-in-out infinite;
-  }
-
-  @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    .home-motion-section .section-title,
-    .home-motion-section .grid:not(.beyond-code-stack) > .card,
-    .home-motion-section .about-preview > :last-child,
-    .home-motion-section .contact-grid > * {
-      animation: home-rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 75%;
-    }
-
-    .home-motion-section .grid:not(.beyond-code-stack) > .card:nth-child(3n + 2) {
-      animation-range: entry 8% entry 86%;
-    }
-
-    .home-motion-section .grid:not(.beyond-code-stack) > .card:nth-child(3n) {
-      animation-range: entry 16% entry 97%;
-    }
-
-    .home-motion-section .hanging-photo {
-      transform-origin: center top;
-      animation: home-photo-swing linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
-    }
-
-    .home-motion-section .process-grid {
-      view-timeline-name: --home-process;
-    }
-
-    .home-motion-section .process-grid::before {
-      animation: home-timeline-draw linear both;
-      animation-timeline: --home-process;
-      animation-range: entry 0% entry 60%;
-    }
-
-    @media (max-width: 760px) {
-      .home-motion-section .process-grid::before {
-        animation-name: home-timeline-draw-vertical;
-      }
-    }
   }
 
   @media (min-width: 761px) and (min-height: 590px) {
@@ -234,16 +167,6 @@
       z-index: var(--stack-index, 0);
       min-height: clamp(240px, 39vh, 350px);
       box-shadow: 0 14px 36px #17191619;
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .home-motion-section .item-image img {
-      transition: scale 340ms cubic-bezier(.22, 1, .36, 1);
-    }
-
-    .home-motion-section .item-card:hover .item-image img {
-      scale: 1.045;
     }
   }
 }

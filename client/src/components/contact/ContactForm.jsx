@@ -6,8 +6,10 @@ export function ContactForm({ services = [] }) {
   return (
     <form
       className="card contact-form"
+      aria-busy={state.busy}
       onSubmit={async (e) => {
         e.preventDefault();
+        if (state.busy) return;
         const form = e.currentTarget;
         setState({ busy: true, error: "", done: false });
         try {
@@ -86,8 +88,17 @@ export function ContactForm({ services = [] }) {
           Your inquiry has been saved. Thank you for reaching out.
         </p>
       )}
-      <button className="button accent" disabled={state.busy}>
-        {state.busy ? "Sending…" : "Send Inquiry"} <Icon />
+      <button className="button accent inquiry-submit" disabled={state.busy}>
+        <span className="inquiry-label">
+          <span aria-hidden="true">Send Inquiry</span>
+          <span aria-hidden="true">Sending…</span>
+          <span>{state.busy ? "Sending…" : "Send Inquiry"}</span>
+        </span>
+        <span className="inquiry-icon" aria-hidden="true">
+          {state.busy ? <span className="inquiry-spinner" /> : (
+            <Icon name={state.done ? "check" : "arrow"} />
+          )}
+        </span>
       </button>
     </form>
   );

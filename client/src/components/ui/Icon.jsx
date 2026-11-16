@@ -33,6 +33,7 @@ export function Icon({ name }) {
         <circle cx="19" cy="12" r="1" />
       </>
     ),
+    check: <path d="m5 12 4 4L19 6" />,
     arrow: <path d="M5 12h14m-6-6 6 6-6 6" />,
     menu: <path d="M4 6h16M4 12h16M4 18h16" />,
   };

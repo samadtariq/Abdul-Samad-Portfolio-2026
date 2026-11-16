@@ -12,7 +12,10 @@ import { Footer } from "./components/layout/Footer.jsx";
 import { Floating } from "./components/layout/FloatingControls.jsx";
 import { Splash } from "./components/layout/Splash.jsx";
 
+import { useSiteMotion } from "./hooks/useSiteMotion.js";
+
 export function Site({ data }) {
+  useSiteMotion();
   const page = resolvePage(data);
   let body;
   if (page.type === "home") body = <Home data={data} />;
@@ -43,7 +46,7 @@ export function Site({ data }) {
           Private draft preview — visible to signed-in admin only.
         </div>
       )}
-      <main id="main" className="container">
+      <main id="main" className="container site-main">
         {body}
       </main>
       <Footer data={data} />
