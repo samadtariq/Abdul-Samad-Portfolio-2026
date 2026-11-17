@@ -313,10 +313,6 @@
   animation: inquiry-success 450ms var(--ui-ease) both;
 }
 
-.skill-counter {
-  display: none;
-}
-
 @keyframes inquiry-spin {
   to { transform: rotate(1turn); }
 }
@@ -455,73 +451,6 @@
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
     }
-  }
-
-  @media (min-height: 540px) {
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) {
-      width: min(100%, 740px);
-      margin-inline: auto;
-      display: grid;
-      position: relative;
-      isolation: isolate;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0;
-      padding-bottom: 14svh;
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) .skill-counter {
-      position: sticky;
-      top: calc(var(--ui-header-height) + 19px);
-      z-index: 2;
-      justify-self: end;
-      display: block;
-      margin: 0 8px 12px 0;
-      min-width: 70px;
-      text-align: center;
-      padding: 4px 10px;
-      background: var(--paper);
-      border: 1px solid var(--ui-border);
-      border-radius: var(--ui-pill);
-      font-size: 11px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card {
-      position: sticky;
-      z-index: 1;
-      top: calc(var(--ui-header-height) + 45px + min(var(--stack-index) * 2px, 16px));
-      min-height: clamp(170px, 32svh, 270px);
-      margin-bottom: 13svh;
-      padding: clamp(22px, 4vw, 46px);
-      transform-origin: center top;
-      animation: none;
-      opacity: 1;
-      filter: none;
-      translate: none;
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card h3 {
-      font-size: clamp(22px, 3vw, 37px);
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card p {
-      font-size: clamp(13px, 1.4vw, 16px);
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card[data-reveal="pending"] {
-      opacity: 0;
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card[data-reveal="shown"]:not([data-stack-past]) {
-      animation: portfolio-fade 360ms var(--ui-ease) backwards;
-    }
-
-    .skill-stack:has(.skill-counter):not([data-motion-flat]) > .card[data-stack-past] {
-      scale: .95;
-      opacity: .58;
-    }
-
   }
 
   .home-motion-section .process-grid::before {

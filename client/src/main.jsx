@@ -12,3 +12,4 @@ else hydrateRoot(document.getElementById("root"), <Site data={data} />);
 import "./styles/style.css";
 import "./styles/home-motion.css";
 import "./styles/portfolio-interactions.css";
+import "./styles/home-showcase.css";

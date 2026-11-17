@@ -55,25 +55,6 @@
   content: "";
 }
 
-.home-motion-section .beyond-code-stack {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-}
-
-.beyond-code-stack > .card {
-  background: var(--white);
-  padding: clamp(24px, 5vw, 56px);
-}
-
-.beyond-code-stack > .card h3 {
-  max-width: 19ch;
-  font-size: clamp(28px, 4.4vw, 56px);
-}
-
-.beyond-code-stack > .card p {
-  max-width: 58ch;
-  font-size: clamp(14px, 1.35vw, 17px);
-}
-
 @keyframes home-rise {
   from {
     opacity: 0.3;
@@ -148,25 +129,5 @@
 
   .floating-motion .bounce {
     animation: home-teaser-pulse 7s ease-in-out infinite;
-  }
-
-  @media (min-width: 761px) and (min-height: 590px) {
-    .home-motion-section .beyond-code-stack:not(:has(> :only-child)) {
-      display: grid;
-      width: min(100%, 720px);
-      margin-inline: auto;
-      grid-template-columns: minmax(0, 1fr);
-      gap: clamp(52px, 15vh, 130px);
-      padding-bottom: 12vh;
-      isolation: isolate;
-    }
-
-    .beyond-code-stack > .card {
-      position: sticky;
-      top: calc(94px + min(var(--stack-index, 0) * 7px, 35px));
-      z-index: var(--stack-index, 0);
-      min-height: clamp(240px, 39vh, 350px);
-      box-shadow: 0 14px 36px #17191619;
-    }
   }
 }

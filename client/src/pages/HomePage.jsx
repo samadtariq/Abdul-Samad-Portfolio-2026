@@ -9,6 +9,8 @@ import { SectionTitle } from "../components/ui/SectionTitle.jsx";
 import { selectFeatured } from "../utils/featured.js";
 import { CardGrid } from "../components/content/CardGrid.jsx";
 import { ContactSection } from "../components/contact/ContactSection.jsx";
+import { Skillset } from "../components/home/Skillset.jsx";
+import { BeyondCode } from "../components/home/BeyondCode.jsx";
 
 export function Home({ data }) {
   const s = data.settings;
@@ -169,51 +171,32 @@ export function Home({ data }) {
             );
             break;
           case "skills":
-          case "process":
-          case "beyond-code": {
-            const group = {
-              skills: "skills",
-              process: "process",
-              "beyond-code": "beyond_code",
-            }[section.key];
-            const list = data.skills.filter((x) => x.group === group);
+            view = (
+              <Skillset
+                skills={data.skills}
+                aboutDescription={s.aboutDescription}
+                subtitle={section.description}
+              />
+            );
+            break;
+          case "beyond-code":
+            view = <BeyondCode subtitle={section.description} />;
+            break;
+          case "process": {
+            const list = data.skills.filter((x) => x.group === "process");
             view = (
               <>
                 <SectionTitle
                   label="CRAFT / PERSPECTIVE"
-                  title={
-                    heading ||
-                    {
-                      skills: "My Skillset",
-                      process: "How I Work",
-                      "beyond-code": "Beyond Code: Vision & Execution",
-                    }[section.key]
-                  }
+                  title={heading || "How I Work"}
                 />
                 {list.length ? (
-                  <div
-                    className={
-                      "grid " +
-                      {
-                        skills: "skills-grid skill-stack",
-                        process: "process-grid",
-                        beyond_code: "beyond-code-stack",
-                      }[group]
-                    }
-                  >
-                    {group === "skills" && list.length > 1 && (
-                      <span className="skill-counter" aria-hidden="true">
-                        <span data-skill-current>01</span> / {String(list.length).padStart(2, "0")}
-                      </span>
-                    )}
+                  <div className="grid process-grid">
                     {list.map((v, i) => (
                       <div
                         className="card compact"
                         key={v._id}
-                        data-step-number={group === "process" ? String(i + 1).padStart(2, "0") : undefined}
-                        style={
-                          group !== "process" ? { "--stack-index": i } : undefined
-                        }
+                        data-step-number={String(i + 1).padStart(2, "0")}
                       >
                         <span className="eyebrow orange">
                           {v.iconKey || String(i + 1).padStart(2, "0")}
@@ -290,9 +273,11 @@ export function Home({ data }) {
             id={section.key}
           >
             {view}
-            {section.description && (
-              <p className="section-description">{section.description}</p>
-            )}
+            {section.description &&
+              section.key !== "skills" &&
+              section.key !== "beyond-code" && (
+                <p className="section-description">{section.description}</p>
+              )}
             {common}
           </section>
         );
