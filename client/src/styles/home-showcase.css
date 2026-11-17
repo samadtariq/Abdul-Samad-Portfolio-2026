@@ -223,24 +223,6 @@
   line-height: 1.6;
 }
 
-.journey-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.journey-tags li {
-  padding: 4px 11px;
-  border: 1px solid var(--ui-chip-border, var(--line));
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
-  font-size: 11px;
-}
-
 .journey-glyph {
   display: grid;
   place-items: center;
@@ -249,6 +231,12 @@
   border: 1px solid var(--line);
   border-radius: 50%;
   color: var(--ink);
+}
+
+.journey-glyph img {
+  object-fit: contain;
+  max-width: 65%;
+  height: auto;
 }
 
 .journey-side {
@@ -325,18 +313,18 @@
 
   @media (min-width: 761px) and (min-height: 640px) {
     /* Sticky geometry lives on the list item. Scroll motion is on its visual children. */
-    .journey-chapters { padding-bottom: 43svh; }
+    .journey-deck:not([data-journey-flat]) .journey-chapters:has(> :nth-child(2)) { padding-bottom: 43svh; }
 
-    .journey-layer {
+    .journey-deck:not([data-journey-flat]) .journey-chapters:has(> :nth-child(2)) > .journey-layer {
       position: sticky;
       top: var(--journey-pin);
     }
 
-    .journey-layer + .journey-layer {
+    .journey-deck:not([data-journey-flat]) .journey-layer + .journey-layer {
       margin-top: max(32px, calc(90svh - clamp(320px, 43svh, 520px)));
     }
 
-    .journey-layer .journey-card {
+    .journey-deck:not([data-journey-flat]) .journey-layer .journey-card {
       min-height: clamp(320px, 43svh, 520px);
       opacity: calc(1 - var(--journey-leave, 0) * .5);
       transform: translateY(calc(var(--journey-leave, 0) * -24px))
@@ -344,20 +332,20 @@
       filter: blur(calc(var(--journey-leave, 0) * 2px));
     }
 
-    .journey-layer .journey-card[data-section-visibility] {
+    .journey-deck:not([data-journey-flat]) .journey-layer .journey-card[data-section-visibility] {
       animation: none;
     }
 
-    .journey-layer .journey-copy {
+    .journey-deck:not([data-journey-flat]) .journey-layer .journey-copy {
       opacity: calc(.65 + var(--journey-enter, 1) * .35 - var(--journey-leave, 0) * .15);
       filter: blur(calc((1 - var(--journey-enter, 1)) * 1px));
     }
 
-    .journey-glyph svg { transform: rotate(var(--journey-twist, 0deg)); }
+    .journey-deck:not([data-journey-flat]) .journey-glyph svg { transform: rotate(var(--journey-twist, 0deg)); }
   }
 
   @media (min-width: 1260px) and (min-height: 640px) {
-    .journey-side {
+    .journey-deck:not([data-journey-flat]) .journey-side {
       position: sticky;
       top: 49svh;
       z-index: 1;

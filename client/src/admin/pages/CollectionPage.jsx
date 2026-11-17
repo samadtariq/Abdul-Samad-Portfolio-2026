@@ -13,6 +13,26 @@ export function Collection({ name, definition, options, id }) {
     [error, setError] = useState(""),
     [loading, setLoading] = useState(true),
     [revision, setRevision] = useState(0);
+  const [importingJourney, setImportingJourney] = useState(false);
+  const [journeyMessage, setJourneyMessage] = useState("");
+
+  async function importJourney() {
+    setImportingJourney(true);
+    setJourneyMessage("");
+    try {
+      const { added, skipped } = await api("/api/admin/skill_items/import-journey", {
+        method: "POST",
+      });
+      setQuery("");
+      setPage(1);
+      setJourneyMessage(`Added ${added} Beyond Code chapters. ${skipped} already existed.`);
+    } catch (e) {
+      setJourneyMessage(e.message);
+    } finally {
+      setRevision((value) => value + 1);
+      setImportingJourney(false);
+    }
+  }
   useEffect(() => {
     if (id) return;
     setLoading(true);
@@ -56,6 +76,19 @@ export function Collection({ name, definition, options, id }) {
           </a>
         )}
       </div>
+      {name === "skill_items" && (
+        <div className="row">
+          <button
+            type="button"
+            className="button small outline"
+            disabled={importingJourney}
+            onClick={importJourney}
+          >
+            {importingJourney ? "Importing…" : "Import Beyond Code chapters"}
+          </button>
+          {journeyMessage && <span role="status">{journeyMessage}</span>}
+        </div>
+      )}
       {name === "media" && <Upload onDone={() => setRevision((x) => x + 1)} />}
       <div className="filter-bar">
         <label className="search-label">
@@ -128,7 +161,9 @@ export function Collection({ name, definition, options, id }) {
                   </small>
                 </div>
                 <span className="badge">
-                  {row.publicationStatus || row.status || ""}
+                  {name === "skill_items"
+                    ? (row.visible ? "Visible" : "Hidden")
+                    : row.publicationStatus || row.status || ""}
                 </span>
                 {row.progressStatus && (
                   <span className="badge">

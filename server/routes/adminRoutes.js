@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { dashboard } from "../controllers/dashboardController.js";
 import { createContentController } from "../controllers/contentController.js";
+import { importJourneyChapters } from "../controllers/journeyController.js";
 import { noStore } from "../middleware/securityMiddleware.js";
 export function createAdminRouter({ storage, requireAuth, csrf }) {
   const router = Router(),
@@ -11,6 +12,7 @@ export function createAdminRouter({ storage, requireAuth, csrf }) {
   router.get("/reference-options", c.referenceOptions);
   router.get("/:collection", c.list);
   router.get("/:collection/:id", c.get);
+  router.post("/skill_items/import-journey", importJourneyChapters);
   router.post("/:collection", c.create);
   router.put("/:collection/:id", c.update);
   router.delete("/:collection/:id", c.remove);

@@ -180,7 +180,12 @@ export function Home({ data }) {
             );
             break;
           case "beyond-code":
-            view = <BeyondCode subtitle={section.description} />;
+            view = (
+              <BeyondCode
+                subtitle={section.description}
+                chapters={data.skills.filter((item) => item.group === "beyond_code")}
+              />
+            );
             break;
           case "process": {
             const list = data.skills.filter((x) => x.group === "process");
